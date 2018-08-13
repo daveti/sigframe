@@ -10,47 +10,57 @@
 #include <linux/kprobes.h>
 
 static const char *target = "sig";
-static struct kprobe kp = {
-	.symbol_name = "get_sigframe",
-};
 
-static inline int is_not_target(void)
+static inline int not_target(void)
 {
 	char comm[TASK_COMM_LEN];
-
 	get_task_comm(comm, current);
-
 	return strcmp(target, comm);
 }
 
-static int kp_entry(struct kprobe *p, struct pt_regs *regs)
+static int kp_entry(struct kretprobe_instance *ri, struct pt_regs *regs)
 {
-	if (is_not_target())
+	struct pt_regs *uregs;
+	size_t frame_size;
+
+	if (not_target())
 		return 0;
 
 	pr_info("kp: %s: rip [0x%lx]\n",
 		__func__, regs->ip);
 	dump_stack();
 
+	uregs = (void *)regs->si;
+	frame_size = (size_t)regs->dx;
+
+	pr_info("kp: %s: urges [%p], frame_size [%lu]\n"
+		"urbp 0x%lx, ursp 0x%lx, urip 0x%lx\n",
+		__func__, uregs, frame_size,
+		uregs->ip, uregs->bp, uregs->sp);
+
 	return 0;
 }
 
-static void kp_ret(struct kprobe *p, struct pt_regs *regs, unsigned long flags)
+static int kp_ret(struct kretprobe_instance *ri, struct pt_regs *regs)
 {
-	if (is_not_target())
-		return;
+	if (not_target())
+		return 0;
 
-	pr_info("kp: %s: ip [0x%lx]\n",
-		__func__, regs->ip);
-	return;
-}
-
-static int kp_fault(struct kprobe *p, struct pt_regs *regs, int trapnr)
-{
-	pr_info("kp: %s: ip [0x%lx], trap [%d]\n",
-		__func__, regs->ip, trapnr);
+	pr_info("kp: %s: ip [0x%lx]\n"
+		"ret(ursp) 0x%lx\n",
+		__func__, regs->ip, regs->ax);
+	
 	return 0;
 }
+
+static struct kretprobe krp = {
+	.handler		= kp_ret,
+	.entry_handler		= kp_entry,
+	.data_size		= 0,
+	/* Probe up to 20 instances concurrently. */
+	.maxactive		= 20,
+	.kp.symbol_name		= "get_sigframe.isra.13.constprop.14",
+};
 
 static int __init ksig_init(void)
 {
@@ -58,17 +68,12 @@ static int __init ksig_init(void)
 
 	pr_info("ksig: Entering: %s\n", __func__);
 
-	/* kp part */
-	kp.pre_handler = kp_entry;
-	kp.post_handler = kp_ret;
-	kp.fault_handler = kp_fault;
-
-	ret = register_kprobe(&kp);
+	ret = register_kretprobe(&krp);
 	if (ret < 0) {
-		pr_err("kp: register_kprobe failed, returned %d\n", ret);
+		pr_err("kp: register_kretprobe failed, returned %d\n", ret);
 		return ret;
 	}
-	pr_info("kp: kprobe at %p\n", kp.addr);
+	pr_info("kp: kretprobe at %p\n", krp.kp.addr);
 
 	return 0;
 }
@@ -76,7 +81,7 @@ static int __init ksig_init(void)
 static void __exit ksig_exit(void)
 {
 	pr_info("exiting ksig module\n");
-	unregister_kprobe(&kp);
+	unregister_kretprobe(&krp);
 }
 
 module_init(ksig_init);
