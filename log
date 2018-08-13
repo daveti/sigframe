@@ -1,0 +1,10 @@
+daveti@daveti:~/git/sigframe$ ./sig
+Love is for suckers!
+Love is for suckers!
+^Csig_handler: signum 2|2, info [0x7fff53fbaf30-0x7fff53fbafb0] size 0x80, uc [0x7fff53fbae00-0x7fff53fbb1a8] size 0x3a8
+Current: rbp 0x7fff53fbadf0, rsp 0x7fff53fbadb0, rip 0x4007c9
+Ucontext: rbp 0x0, rsp 0x7fff53fbb398, rip 0x7f9207a6b2f0
+Reserved stack area [0x7fff53fbae00-0x7fff53fbb398] size 0x598
+Love is for suckers!
+Love is for suckers!
+Love is for suckers!

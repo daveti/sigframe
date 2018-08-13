@@ -1,0 +1,66 @@
+[167119.535346] ksig: Entering: ksig_init
+[167119.543345] kp: kretprobe at 00000000f6ed0871
+[167210.815288] exiting ksig module
+[175375.392491] ksig: Entering: ksig_init
+[175375.399663] krp: kretprobe at 000000004d743f20
+[175375.405304] kp: kprobe at 000000005ee0580c
+[175390.495177] kp: kp_entry: ip [0xffffffff9fe2c2a1], rdi [0xffff9bc300653f58]
+[175390.495184] CPU: 3 PID: 12835 Comm: sig Tainted: G           OE    4.15.0-29-generic #31~16.04.1-Ubuntu
+[175390.495186] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-2.fc27 04/01/2014
+[175390.495188] Call Trace:
+[175390.495202]  dump_stack+0x63/0x8b
+[175390.495210]  kp_entry+0x8e/0xbf [ksig]
+[175390.495217]  ? do_signal+0x1/0x740
+[175390.495225]  kprobe_ftrace_handler+0x90/0xf0
+[175390.495231]  ftrace_ops_assist_func+0x5b/0xf0
+[175390.495237]  ? put_timespec64+0x3f/0x60
+[175390.495242]  0xffffffffc06380d5
+[175390.495247]  ? do_signal+0x1/0x740
+[175390.495251]  do_signal+0x5/0x740
+[175390.495257]  exit_to_usermode_loop+0x80/0xd0
+[175390.495260]  ? do_signal+0x5/0x740
+[175390.495264]  ? exit_to_usermode_loop+0x80/0xd0
+[175390.495268]  do_syscall_64+0xf4/0x130
+[175390.495275]  entry_SYSCALL_64_after_hwframe+0x3d/0xa2
+[175390.495278] RIP: 0033:0x7f9207a6b2f0
+[175390.495280] RSP: 002b:00007fff53fbb398 EFLAGS: 00000246 ORIG_RAX: 0000000000000023
+[175390.495285] RAX: fffffffffffffdfc RBX: ffffffffffffff98 RCX: 00007f9207a6b2f0
+[175390.495287] RDX: 00007f9207d65780 RSI: 00007fff53fbb3a0 RDI: 00007fff53fbb3a0
+[175390.495289] RBP: 0000000000000000 R08: 217372656b637573 R09: 000000000000000d
+[175390.495291] R10: 00007f9207d63b78 R11: 0000000000000246 R12: 0000000000400660
+[175390.495293] R13: 00007fff53fbb550 R14: 0000000000000000 R15: 0000000000000000
+[175390.495297] kp: kp_entry: urip [0x7f9207a6b2f0], urbp [0x0], ursp [0x7fff53fbb398]
+[175390.495299] kp: kp_ret: ip [0xffffffff9fe2c2a5]
+[175390.495307] krp: krp_entry: rip [0xffffffff9fe2bfa1]
+[175390.495310] CPU: 3 PID: 12835 Comm: sig Tainted: G           OE    4.15.0-29-generic #31~16.04.1-Ubuntu
+[175390.495312] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-2.fc27 04/01/2014
+[175390.495313] Call Trace:
+[175390.495318]  dump_stack+0x63/0x8b
+[175390.495322]  krp_entry+0x89/0xc0 [ksig]
+[175390.495327]  pre_handler_kretprobe+0xbd/0x1c0
+[175390.495332]  ? get_sigframe.isra.13.constprop.14+0x1/0x1c0
+[175390.495336]  ? get_sigframe.isra.13.constprop.14+0x5/0x1c0
+[175390.495341]  kprobe_ftrace_handler+0x90/0xf0
+[175390.495345]  ftrace_ops_assist_func+0x5b/0xf0
+[175390.495347]  0xffffffffc06380d5
+[175390.495353]  ? get_sigframe.isra.13.constprop.14+0x1/0x1c0
+[175390.495357]  get_sigframe.isra.13.constprop.14+0x5/0x1c0
+[175390.495361]  do_signal+0x1d7/0x740
+[175390.495365]  ? get_sigframe.isra.13.constprop.14+0x5/0x1c0
+[175390.495368]  ? do_signal+0x1d7/0x740
+[175390.495374]  ? do_signal+0x5/0x740
+[175390.495378]  exit_to_usermode_loop+0x80/0xd0
+[175390.495382]  do_syscall_64+0xf4/0x130
+[175390.495386]  entry_SYSCALL_64_after_hwframe+0x3d/0xa2
+[175390.495388] RIP: 0033:0x7f9207a6b2f0
+[175390.495390] RSP: 002b:00007fff53fbb398 EFLAGS: 00000246 ORIG_RAX: 0000000000000023
+[175390.495393] RAX: fffffffffffffffc RBX: ffffffffffffff98 RCX: 00007f9207a6b2f0
+[175390.495395] RDX: 00007f9207d65780 RSI: 00007fff53fbb3a0 RDI: 00007fff53fbb3a0
+[175390.495397] RBP: 0000000000000000 R08: 217372656b637573 R09: 000000000000000d
+[175390.495399] R10: 00007f9207d63b78 R11: 0000000000000246 R12: 0000000000400660
+[175390.495401] R13: 00007fff53fbb550 R14: 0000000000000000 R15: 0000000000000000
+[175390.495408] krp: krp_entry: urges [00000000a600c025], frame_size [440]
+                urbp 0x0, ursp 0x0, urip 0x0
+[175390.495413] krp: krp_ret: ip [0xffffffff9fe65b60]
+                ret(ursp) 0x7fff53fbadf8
+daveti@daveti:~/git/sigframe/kmod$
